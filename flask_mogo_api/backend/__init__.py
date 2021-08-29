@@ -11,6 +11,7 @@ jwt = JWTManager()
 
 
 # Instantiating and Binding the flask app
+
 def create_app(config_class=Config):
 	app = Flask(__name__)
 	app.config.from_object(Config)
@@ -23,6 +24,7 @@ def create_app(config_class=Config):
 	from backend.templates.routes import templates	  # importing the templates route from the templates module
 
 # Registering the users and templates route
+
 	app.register_blueprint(users)
 	app.register_blueprint(templates)
 

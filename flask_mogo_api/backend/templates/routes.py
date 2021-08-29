@@ -31,14 +31,18 @@ def create_get_templates():
 @templates.route('/template/<template_id>', methods=['GET', 'PUT', 'DELETE'])
 @jwt_required() # jwt authentication token is required
 def get_update_delete_template(template_id):
+
     """get_user_and_template method returns the current logged in user and the requested template"""
+
     current_user, template = Templates.get_user_and_template(template_id)
 
     """for the GET method, return the template of the provided template_id"""
+
     if request.method == 'GET':
         return Templates.get_single_template(current_user=current_user, template=template)
 
     """for the PUT method, update the template of the provided template_id"""
+
     if request.method == 'PUT':
         data = request.get_json()
 
@@ -47,6 +51,7 @@ def get_update_delete_template(template_id):
                                 body=data.get("body", None))
 
     """for the DELETE method, delete the template of the provided template_id"""
+
     if request.method == 'DELETE':
         return Templates.delete_template(template_id=template_id, current_user=current_user, template=template)
 

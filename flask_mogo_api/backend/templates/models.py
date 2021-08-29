@@ -16,16 +16,21 @@ class Templates:
 
     def create_template(template_name, subject, body):
         """crete a new template"""
+
         current_user = mongo.db.user.find_one({"email": get_jwt_identity()})
+
         """get the current_user using the jwt token and use the user_id as a 
         relation to keep track of identifying the template author """
 
         user_id = current_user['_id']
         if template_name and subject and body:
             """make a new doc to keep track of the template id in the crud """
+
             last_id = mongo.db.template_id_track.find_one()
             last_id = last_id["last_id"]
+
             """insert the template in the database"""
+
             mongo.db.templates.insert_one({
                                         "_id": str(int(last_id)+1) ,
                                         "template_name": template_name,
@@ -36,8 +41,11 @@ class Templates:
 
             mongo.db.template_id_track.update_one({'_id': '1'}, {"$set": {"last_id": str(int(last_id)+1)}})
             """make a response with 200 and a msg"""
+
             return response_with(resp.SUCCESS_200, value={"msg": "template created successfully"})
+
         """if any of the parameter is None we respond with 422"""
+
         return response_with(resp.MISSING_PARAMETERS_422, value={
             "msg": "all parameters required(template_name, subject, body)"
         })
@@ -47,6 +55,7 @@ class Templates:
         
         template = mongo.db.templates.find_one({'_id': template_id})
         """find the user of the template"""
+
         current_user = mongo.db.user.find_one({'email': get_jwt_identity()})
 
         if template_id is None:
@@ -56,6 +65,7 @@ class Templates:
 
     def get_single_template(current_user, template):
         """return the template if the template exist"""
+
         if template is not None:
             if current_user['_id'] == template["user_id"]:
 
@@ -68,13 +78,16 @@ class Templates:
         """the update_template checks whether the provided template exist,
         if exist checks if the current user is the author of the template and update
         else respond with a unauthorized 403"""
+
         if template is None:
             """respond 400 if the template does not exist"""
+
             return response_with(resp.BAD_REQUEST_400, value={"message": "template with the given id does not exist"})
 
         if current_user['_id'] == template['user_id']:
             """if current user is the author of the template then update the fields which 
             are present in the request json"""
+
             if template_name:
                 filt = {'_id': template_id}
                 update = {"$set": {"template_name": template_name}}
@@ -98,6 +111,7 @@ class Templates:
 
         if template is None:
             """respond 400 if the template does not exist"""
+
             return response_with(resp.BAD_REQUEST_400, value={"message": "template with the given id does not exist"})
 
         if current_user['_id'] == template["user_id"]:
@@ -106,5 +120,7 @@ class Templates:
 
             mongo.db.templates.delete_one(record)
             return response_with(resp.SUCCESS_200, value={"msg": "template deleted successfully"})
+
         """return 403 if the author of the template is not the current user"""
+
         return response_with(resp.UNAUTHORIZED_403)

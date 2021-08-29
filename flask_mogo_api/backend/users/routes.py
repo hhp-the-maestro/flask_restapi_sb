@@ -16,6 +16,7 @@ def register():
     data = request.get_json()
 
     """check whether the provided email is valid using regex"""
+
     regex = re.compile(r'''([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+(\.[a-zA-Z]{2,4}))''', re.VERBOSE)
     mail = regex.search(data['email'])
 
@@ -31,6 +32,7 @@ def register():
 @users.route('/login', methods=['POST'])
 def login():
     """get and validate the request json and return response with a access token(JWT token)"""
+    
     data = request.get_json()
 
     if data.get("email", None) and data.get("password", None):

@@ -2,6 +2,9 @@ from flask import make_response, jsonify
 
 
 def response_with(response, value=None, message=None, error=None, headers={}):
+
+	"""make response for the request provided"""
+
 	result = {}
 
 	if value is not None:
