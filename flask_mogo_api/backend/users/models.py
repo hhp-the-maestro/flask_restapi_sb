@@ -29,19 +29,19 @@ class User:
 			c = mongo.db.user.count()
 			"""insert the user to the mongodb"""
 			id = mongo.db.user.insert_one({
-											"_id": str(c+1),
-											"first_name": first_name,
-											"last_name": last_name,
-											"email": email,
-											"password": password
-											})
+							"_id": str(c+1),
+							"first_name": first_name,
+						        "last_name": last_name,
+						        "email": email,
+						        "password": password				       
+						      })
 
 			response = {
-						"first_name": first_name,
-						"last_name": last_name,
-						"email": email,
-						"password": password
-						}
+				    "first_name": first_name,
+				    "last_name": last_name,
+				    "email": email,
+				    "password": password
+				   }
 			"""make response with 200 and the details of the user"""
 			return response_with(resp.SUCCESS_200, value=response)
 
